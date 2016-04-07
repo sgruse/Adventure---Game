@@ -69,4 +69,12 @@ Fruit.prototype = new Plant();
 var aBanana = new Fruit('Banana', 'Yellow');
 
 // console.log(aBanana.name);
-console.log(aBanana.showNameAndColor());
+// console.log(aBanana.showNameAndColor());
+
+// console.log(Fruit.prototype);
+
+
+var myFriends = {name: 'Pete'}
+
+// console.log(myFriends.toString());
+console.log(myFriends.toString());
