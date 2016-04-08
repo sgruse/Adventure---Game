@@ -87,14 +87,12 @@ function keyUpHandler(e) {
     }
 
     if(e.keyCode == 87) {
-      console.log('Up has been pressed');
         wPressed = false;
     }
     else if(e.keyCode == 68) {
         dPressed = false;
     }
     else if(e.keyCode == 83) {
-      console.log('Down Key is presed down');
         sPressed = false;
     }
     else if(e.keyCode == 65) {
@@ -103,21 +101,16 @@ function keyUpHandler(e) {
 }
 
 //BALL COORDINATES
-var xYCord = [[80, 90]]
-// var xYCord = [[80, 90], [50, 75], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
-
+var xYCord = [[80, 90], [50, 75], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
+var index = 0;
 function drawBall() {
   if (ballStatus == 1) {
-  for (var i = 0; i < xYCord.length; i++) {
-  // var xAxe = 80,
-  //   yAxe = 90;
   ctx.beginPath();
-  ctx.arc(xYCord[i][0], xYCord[i][1], ballRadius, 0, Math.PI*2);
+  ctx.arc(xYCord[index][0], xYCord[index][1], ballRadius, 0, Math.PI*2);
   ctx.fillStyle = "#666";
   ctx.fill();
   ctx.closePath();
   }
-}
 }
 
 function drawPaddle() {
@@ -143,46 +136,35 @@ function drawPaddleTwo() {
 }
 
 
+function bb() {
+  // BALL STATUS AND DISSIPEARING
+  var dist = ((paddleX - xYCord[index][0]) * (paddleX - xYCord[index][0]) + (paddleY - xYCord[index][1]) * (paddleY - xYCord[index][1]))
+  var dist2 = ((paddleX2 - xYCord[index][0]) * (paddleX2 - xYCord[index][0]) + (paddleY2 - xYCord[index][1]) * (paddleY2 - xYCord[index][1]))
 
-
-// if (dist < ballRadius){
-//   console.log('collision');
-// }
-
-
-// COLLISION FUNCTION
-function collision() {
-  if (ctx.rect(paddleX, paddleY-paddleHeight, paddleWidth, paddleHeight == ctx.arc(80, 90, ballRadius, 0, Math.PI*2))){
-    console.log('ball was hit');
-  }
-
+// console.log(dist);
+if (dist < 100) {
+  playerOneBallCount ++
+  console.log(playerOneBallCount);
+  ballStatus = 0;
+  index ++
+  ballStatus = 1;
 }
 
+if (dist2 < 100) {
+  playerTwoBallCount ++
+  console.log(playerTwoBallCount);
+  ballStatus = 0;
+  index ++
+  ballStatus = 1;
+
+  }
+}
 
 function draw() {
   drawPaddleTwo();
   drawPaddle();
   drawBall();
-  collision();
-
-// BALL STATUS AND DISSIPEARING
-  var dist = ((paddleX - 80) * (paddleX - 80) + (paddleY - 90) * (paddleY - 90))
-  var dist2 = ((paddleX2 - 80) * (paddleX2 - 80) + (paddleY2 - 90) * (paddleY2 - 90))
-
-  // console.log(dist);
-  if (dist < 100) {
-    playerOneBallCount ++
-    console.log(playerOneBallCount);
-    ballStatus = 0;
-  }
-
-  if (dist2 < 100) {
-    playerTwoBallCount ++
-    console.log(playerTwoBallCount);
-    ballStatus = 0;
-  }
-
-
+  bb();
 
   if(rightPressed && paddleX < canvas.width-paddleWidth) {
     paddleX += 2;
@@ -218,7 +200,6 @@ function draw() {
   x += dx;
   y += dy;
   requestAnimationFrame(draw);
-  // setInterval(10)
 
 }
 
