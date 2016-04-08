@@ -22,15 +22,19 @@ var playerOneBallCount = 0;
 var playerTwoBallCount = 0;
 
 
+var sizeGains = [25, 80, 100]
+var sizeGainsIndex = 0;
+console.log(sizeGainsIndex)
+
 // PADDLE VARIABLES 1
-var paddleHeight = 25;
-var paddleWidth = 25;
+var paddleHeight = sizeGains[sizeGainsIndex];
+var paddleWidth = sizeGains[sizeGainsIndex];
 var paddleX = (canvas.width-paddleWidth)/2;
 var paddleY = (canvas.height-paddleHeight)/2;
 
 // PADDLE VARIABLES 2
-var paddleHeight2 = 25;
-var paddleWidth2 = 25;
+var paddleHeight2 = sizeGains[sizeGainsIndex];
+var paddleWidth2 = sizeGains[sizeGainsIndex];
 var paddleX2 = (canvas.width-paddleWidth2)/1.5;
 var paddleY2 = (canvas.height-paddleHeight2)/1.5;
 
@@ -55,14 +59,12 @@ function keyDownHandler(e) {
 
 
     if(e.keyCode == 87) {
-      console.log('Up has been pressed');
         wPressed = true;
     }
     else if(e.keyCode == 68) {
         dPressed = true;
     }
     else if(e.keyCode == 83) {
-      console.log('Down Key is presed down');
         sPressed = true;
     }
     else if(e.keyCode == 65) {
@@ -107,6 +109,7 @@ function drawBall() {
   if (ballStatus == 1) {
   ctx.beginPath();
   ctx.arc(xYCord[index][0], xYCord[index][1], ballRadius, 0, Math.PI*2);
+  // console.log('INDEX COUNTER : ' + index);
   ctx.fillStyle = "#666";
   ctx.fill();
   ctx.closePath();
@@ -144,21 +147,28 @@ function bb() {
 // console.log(dist);
 if (dist < 100) {
   playerOneBallCount ++
-  console.log(playerOneBallCount);
+  // console.log('Player One Ball Count : ' + playerOneBallCount);
   ballStatus = 0;
   index ++
   ballStatus = 1;
+  powerIndex ++
+  sizeGainsIndex ++
 }
+
 
 if (dist2 < 100) {
   playerTwoBallCount ++
-  console.log(playerTwoBallCount);
+  console.log('Player Two Ball Count : ' + playerTwoBallCount);
   ballStatus = 0;
   index ++
   ballStatus = 1;
+  powerIndex ++
 
   }
 }
+
+var powerSpeeds = [2, 3, 4, 5, 6, 7, 8, 9]
+var powerIndex = 0;
 
 function draw() {
   drawPaddleTwo();
@@ -167,34 +177,34 @@ function draw() {
   bb();
 
   if(rightPressed && paddleX < canvas.width-paddleWidth) {
-    paddleX += 2;
+    paddleX += powerSpeeds[powerIndex];
   }
   if(leftPressed && paddleX > 0) {
-    paddleX -= 2;
+    paddleX -= powerSpeeds[powerIndex];
   }
   if(upPressed && paddleY > 0) {
-    paddleY -= 2;
+    paddleY -= powerSpeeds[powerIndex];
   }
   else if(upPressed && paddleY < canvas.height-paddleHeight)
     paddleY = 25;
   if(downPressed && paddleY < canvas.height-paddleHeight+25 ) {
-    paddleY += 2;
+    paddleY += powerSpeeds[powerIndex];
   }
 
 
   if(dPressed && paddleX2 < canvas.width-paddleWidth2) {
-    paddleX2 += 2;
+    paddleX2 += powerSpeeds[powerIndex];
   }
   if(aPressed && paddleX2 > 0) {
-    paddleX2 -= 2;
+    paddleX2 -= powerSpeeds[powerIndex];
   }
   if(wPressed && paddleY2 > 0) {
-    paddleY2 -= 2;
+    paddleY2 -= powerSpeeds[powerIndex];
   }
   else if(wPressed && paddleY2 < canvas.height-paddleHeight2)
     paddleY2 = 25;
   if(sPressed && paddleY2 < canvas.height-paddleHeight2+25 ) {
-    paddleY2 += 2;
+    paddleY2 += powerSpeeds[powerIndex];
   }
 
   x += dx;
