@@ -17,6 +17,10 @@ var dPressed = false;
 var sPressed = false;
 var aPressed = false;
 
+var ballStatus = 1;
+var playerOneBallCount = 0;
+var playerTwoBallCount = 0;
+
 
 // PADDLE VARIABLES 1
 var paddleHeight = 25;
@@ -98,6 +102,24 @@ function keyUpHandler(e) {
     }
 }
 
+//BALL COORDINATES
+var xYCord = [[80, 90]]
+// var xYCord = [[80, 90], [50, 75], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
+
+function drawBall() {
+  if (ballStatus == 1) {
+  for (var i = 0; i < xYCord.length; i++) {
+  // var xAxe = 80,
+  //   yAxe = 90;
+  ctx.beginPath();
+  ctx.arc(xYCord[i][0], xYCord[i][1], ballRadius, 0, Math.PI*2);
+  ctx.fillStyle = "#666";
+  ctx.fill();
+  ctx.closePath();
+  }
+}
+}
+
 function drawPaddle() {
     // ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.beginPath();
@@ -120,19 +142,47 @@ function drawPaddleTwo() {
     ctx.closePath();
 }
 
-function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+
+
+
+// if (dist < ballRadius){
+//   console.log('collision');
+// }
+
+
+// COLLISION FUNCTION
+function collision() {
+  if (ctx.rect(paddleX, paddleY-paddleHeight, paddleWidth, paddleHeight == ctx.arc(80, 90, ballRadius, 0, Math.PI*2))){
+    console.log('ball was hit');
+  }
+
 }
 
+
 function draw() {
-  // var blah = ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
   drawPaddleTwo();
   drawPaddle();
   drawBall();
+  collision();
+
+// BALL STATUS AND DISSIPEARING
+  var dist = ((paddleX - 80) * (paddleX - 80) + (paddleY - 90) * (paddleY - 90))
+  var dist2 = ((paddleX2 - 80) * (paddleX2 - 80) + (paddleY2 - 90) * (paddleY2 - 90))
+
+  // console.log(dist);
+  if (dist < 100) {
+    playerOneBallCount ++
+    console.log(playerOneBallCount);
+    ballStatus = 0;
+  }
+
+  if (dist2 < 100) {
+    playerTwoBallCount ++
+    console.log(playerTwoBallCount);
+    ballStatus = 0;
+  }
+
+
 
   if(rightPressed && paddleX < canvas.width-paddleWidth) {
     paddleX += 2;
@@ -168,6 +218,7 @@ function draw() {
   x += dx;
   y += dy;
   requestAnimationFrame(draw);
+  // setInterval(10)
 
 }
 
