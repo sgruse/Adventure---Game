@@ -2,7 +2,7 @@
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var ballRadius = 10;
+var ballRadius = 7;
 var x = canvas.width/2;
 var y = canvas.height-30;
 var dx = 2;
@@ -21,7 +21,8 @@ var ballStatus = 1;
 var playerOneBallCount = 0;
 var playerTwoBallCount = 0;
 
-
+var playerOneScore = 0;
+var playerTwoScore = 0;
 
 //EVENT LISTENTERS
 document.addEventListener('keyup', keyUpHandler, false);
@@ -55,7 +56,6 @@ function keyDownHandler(e) {
     else if(e.keyCode == 65) {
         aPressed = true;
     }
-
 
 }
 
@@ -98,10 +98,20 @@ function randomCoordY(min, max) {
   coordY = Math.floor(Math.random() * (max - min)) + min;
 }
 
-//BALL COORDINATES
-// var xYCord = [[80, 190], [50, 75], [125, 130], [354, 22], [354, 89], [80, 233], [90, 80], [234, 344], [81, 92], [51, 78], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
-var xYCord = [[80, 190], [50, 75], [125, 130], [354, 22], [354, 89], [80, 233], [90, 80], [234, 344], [81, 92], [51, 78], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
 
+function drawScorePlayerOne() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Blue Player Score : "+playerOneScore, 8, 20);
+}
+
+function drawScorePlayerTwo() {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#666';
+  ctx.fillText("Grey Player Score : " +playerTwoScore, 315, 20);
+}
+
+//BALL COORDINATES
 var index = 0;
 function drawBall() {
   if (ballStatus == 1) {
@@ -112,16 +122,6 @@ function drawBall() {
   ctx.closePath();
   }
 }
-
-// function drawBall() {
-//   if (ballStatus == 1) {
-//   ctx.beginPath();
-//   ctx.arc(xYCord[index][0], xYCord[index][1], ballRadius, 0, Math.PI*2);
-//   ctx.fillStyle = "#666";
-//   ctx.fill();
-//   ctx.closePath();
-//   }
-// }
 
 function drawPaddle() {
     ctx.beginPath();
@@ -146,7 +146,7 @@ var powerSpeeds = [2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8
 var powerIndexOne = 0;
 var powerIndexTwo = 0;
 
-var sizeGains = [30, 30, 30, 40, 40, 40, 50, 50, 50, 60, 60, 60, 70, 70, 70]
+var sizeGains = [5, 7, 8, 10, 11, 13, 15, 20, 23, 25, 27, 30, 33, 36, 40]
 var sizeGainsIndexOne = 0;
 var sizeGainsIndexTwo = 0;
 
@@ -174,9 +174,10 @@ if (dist < 100) {
   sizeGainsIndexOne ++
   ballStatus = 0;
   // index ++
-  randomCoordX(0, 479)
-  randomCoordY(0, 319)
+  randomCoordX(30, 460)
+  randomCoordY(30, 300)
   ballStatus = 1;
+  playerOneScore ++
   powerIndexOne ++
 }
 
@@ -185,7 +186,10 @@ if (dist2 < 100) {
   playerTwoBallCount ++
   ballStatus = 0;
   // index ++
+  randomCoordX(30, 440)
+  randomCoordY(30, 270)
   ballStatus = 1;
+  playerTwoScore ++
   powerIndexTwo ++
   sizeGainsIndexTwo ++
 
@@ -196,6 +200,8 @@ function draw() {
   drawPaddleTwo();
   drawPaddle();
   drawBall();
+  drawScorePlayerOne();
+  drawScorePlayerTwo();
   bb();
   console.log('SIZE ONE INDEX VALUE : ' + sizeGainsIndexOne);
 
@@ -235,6 +241,6 @@ function draw() {
   requestAnimationFrame(draw);
 
 }
-randomCoordX(0, 479)
-randomCoordY(0, 319)
+randomCoordX(30, 460)
+randomCoordY(30, 285)
 draw()
