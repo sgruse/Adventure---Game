@@ -21,9 +21,9 @@ var ballStatus = 1;
 var playerOneBallCount = 0;
 var playerTwoBallCount = 0;
 
+var totalGameScore = playerOneScore + playerTwoScore;
 var playerOneScore = 0;
 var playerTwoScore = 0;
-
 //EVENT LISTENTERS
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('keydown', keyDownHandler, false);
@@ -123,6 +123,23 @@ function drawBall() {
   }
 }
 
+var powerCordX,
+  powerCordY;
+
+var powerStatus = 0;
+// DRAW POWER UP
+function drawPowerUp() {
+  if (powerStatus == 1) {
+    ctx.beginPath();
+    ctx.arc(coordX+50, coordY+50, 15, 0, Math.PI*2);
+    ctx.fillStyle = '#FOOOOO';
+    ctx.fill();
+    powerCordX = coordX+50;
+    powerCordY = coordY+50;
+    ctx.closePath();
+  }
+}
+
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, paddleY-sizeGains[sizeGainsIndexOne], sizeGains[sizeGainsIndexOne], sizeGains[sizeGainsIndexOne]);
@@ -163,10 +180,18 @@ var paddleX2 = (canvas.width-paddleWidth2)/1.5;
 var paddleY2 = (canvas.height-paddleHeight2)/1.5;
 
 
+function alert() {
+}
+
 function bb() {
   // BALL STATUS AND DISSIPEARING
   var dist = ((paddleX - coordX) * (paddleX - coordX) + (paddleY - coordY) * (paddleY - coordY))
   var dist2 = ((paddleX2 - coordX) * (paddleX2 - coordX) + (paddleY2 - coordY) * (paddleY2 - coordY))
+
+  var powerDistOne = ((paddleX - powerCordX) * (paddleX - powerCordX) + (paddleY - powerCordY) * (paddleY - powerCordY))
+  var powerDistTwo = ((paddleX2 - powerCordX) * (paddleX2 - powerCordX) + (paddleY2 - powerCordY) * (paddleY2 - powerCordY))
+
+
 
 // PLAYER ONE
 if (dist < 100) {
@@ -179,6 +204,17 @@ if (dist < 100) {
   ballStatus = 1;
   playerOneScore ++
   powerIndexOne ++
+}
+
+if (powerDistOne < 100) {
+  console.log('PLAYER ONE GETS POWER UP');
+  powerStatus = 0;
+  alert();
+}
+
+if (powerDistTwo < 100) {
+  console.log('PLAYER TWO GETS POWER UP');
+  powerStatus = 0;
 }
 
 // PLAYER TWO
@@ -203,7 +239,8 @@ function draw() {
   drawScorePlayerOne();
   drawScorePlayerTwo();
   bb();
-  console.log('SIZE ONE INDEX VALUE : ' + sizeGainsIndexOne);
+
+  totalGameScore = playerOneScore + playerTwoScore
 
   if(rightPressed && paddleX < canvas.width-paddleWidth) {
     paddleX += powerSpeeds[powerIndexOne];
@@ -238,6 +275,11 @@ function draw() {
 
   x += dx;
   y += dy;
+
+  if (totalGameScore == 4 || totalGameScore == 10) {
+    powerStatus = 1;
+    drawPowerUp();
+  }
   requestAnimationFrame(draw);
 
 }
