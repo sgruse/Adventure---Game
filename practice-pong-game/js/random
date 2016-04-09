@@ -24,34 +24,10 @@ var playerTwoBallCount = 0;
 var totalGameScore = playerOneScore + playerTwoScore;
 var playerOneScore = 0;
 var playerTwoScore = 0;
-
-console.log('WELCOME TO THE GREATEST GAME ON EARTH.  BLUE VS GREY! THE FIRST PLAYER TO COLLECT 15 POINTS WINS THE GAME');
-
 //EVENT LISTENTERS
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('keydown', keyDownHandler, false);
 
-var Character = function() {
-  this.name = name;
-  this.speed = 0;
-  this.width = 0;
-  this.height = 0;
-}
-
-var BlueCharacter = function() {
-  this.speed = 5;
-  this.draw = drawPaddle();
-}
-
-BlueCharacter.prototype = new Character();
-
-var greyCharacter = function() {
-  this.height = 15;
-  this.width = 15;
-  this.draw = drawPaddleTwo();
-}
-
-greyCharacter.prototype = new Character();
 
 //EVENT HANDLERS
 function keyDownHandler(e) {
@@ -123,6 +99,7 @@ function randomCoordY(min, max) {
   coordY = Math.floor(Math.random() * (max - min)) + min;
 }
 
+
 function drawScorePlayerOne() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
@@ -151,7 +128,6 @@ var powerCordX,
   powerCordY;
 
 var powerStatus = 0;
-
 // DRAW POWER UP
 function drawPowerUp() {
   if (powerStatus == 1) {
@@ -177,6 +153,7 @@ function drawPaddleTwo() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.beginPath();
     ctx.rect(paddleX2, paddleY2-sizeGains[sizeGainsIndexTwo], sizeGains[sizeGainsIndexTwo], sizeGains[sizeGainsIndexTwo]);
+    // ctx.fillStyle = "#0095DD";
     ctx.fillStyle = "img/myMonster.png";
 
     ctx.fill();
@@ -203,6 +180,10 @@ var paddleWidth2 = sizeGains[sizeGainsIndexTwo];
 var paddleX2 = (canvas.width-paddleWidth2)/1.5;
 var paddleY2 = (canvas.height-paddleHeight2)/1.5;
 
+
+function alert() {
+}
+
 function bb() {
   // BALL STATUS AND DISSIPEARING
   var dist = ((paddleX - coordX) * (paddleX - coordX) + (paddleY - coordY) * (paddleY - coordY))
@@ -211,30 +192,29 @@ function bb() {
   var powerDistOne = ((paddleX - powerCordX) * (paddleX - powerCordX) + (paddleY - powerCordY) * (paddleY - powerCordY))
   var powerDistTwo = ((paddleX2 - powerCordX) * (paddleX2 - powerCordX) + (paddleY2 - powerCordY) * (paddleY2 - powerCordY))
 
+
+
 // PLAYER ONE
 if (dist < 100) {
   playerOneBallCount ++
   sizeGainsIndexOne ++
   ballStatus = 0;
+  // index ++
   randomCoordX(30, 460)
   randomCoordY(30, 300)
   ballStatus = 1;
   playerOneScore ++
   powerIndexOne ++
-  if (playerOneScore >= 15) {
-    console.log('GAME OVER! PLAYER ONE WINS!!!');
-  }
 }
 
 if (powerDistOne < 100) {
-  console.log('PLAYER ONE GETS A SPEED POWER UP OF +5');
-
+  console.log('PLAYER ONE GETS POWER UP');
   powerStatus = 0;
   alert();
 }
 
 if (powerDistTwo < 100) {
-  console.log('PLAYER TWO GETS A SIZE POWER UP OF +5 PIXELS');
+  console.log('PLAYER TWO GETS POWER UP');
   powerStatus = 0;
 }
 
@@ -242,15 +222,14 @@ if (powerDistTwo < 100) {
 if (dist2 < 100) {
   playerTwoBallCount ++
   ballStatus = 0;
+  // index ++
   randomCoordX(30, 440)
   randomCoordY(30, 270)
   ballStatus = 1;
   playerTwoScore ++
   powerIndexTwo ++
   sizeGainsIndexTwo ++
-  if (playerTwoScore >= 15) {
-    console.log('GAME OVER! PLAYER TWO WINS!!!');
-  }
+
   }
 }
 
@@ -279,6 +258,7 @@ function draw() {
     paddleY += powerSpeeds[powerIndexOne];
   }
 
+
   if(dPressed && paddleX2 < canvas.width-paddleWidth2) {
     paddleX2 += powerSpeeds[powerIndexTwo];
   }
@@ -301,11 +281,9 @@ function draw() {
     powerStatus = 1;
     drawPowerUp();
   }
-
   requestAnimationFrame(draw);
 
 }
-
 randomCoordX(30, 460)
 randomCoordY(30, 285)
 draw()
