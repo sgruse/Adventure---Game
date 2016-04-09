@@ -22,21 +22,6 @@ var playerOneBallCount = 0;
 var playerTwoBallCount = 0;
 
 
-var sizeGains = [25, 80, 100]
-var sizeGainsIndex = 0;
-console.log(sizeGainsIndex)
-
-// PADDLE VARIABLES 1
-var paddleHeight = sizeGains[sizeGainsIndex];
-var paddleWidth = sizeGains[sizeGainsIndex];
-var paddleX = (canvas.width-paddleWidth)/2;
-var paddleY = (canvas.height-paddleHeight)/2;
-
-// PADDLE VARIABLES 2
-var paddleHeight2 = sizeGains[sizeGainsIndex];
-var paddleWidth2 = sizeGains[sizeGainsIndex];
-var paddleX2 = (canvas.width-paddleWidth2)/1.5;
-var paddleY2 = (canvas.height-paddleHeight2)/1.5;
 
 //EVENT LISTENTERS
 document.addEventListener('keyup', keyUpHandler, false);
@@ -102,27 +87,46 @@ function keyUpHandler(e) {
     }
 }
 
+var coordX,
+  coordY;
+// RANDOM BALL COORDINATES
+function randomCoordX(min, max) {
+  coordX = Math.floor(Math.random() * (max - min)) + min;
+}
+
+function randomCoordY(min, max) {
+  coordY = Math.floor(Math.random() * (max - min)) + min;
+}
+
 //BALL COORDINATES
-var xYCord = [[80, 90], [50, 75], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
+// var xYCord = [[80, 190], [50, 75], [125, 130], [354, 22], [354, 89], [80, 233], [90, 80], [234, 344], [81, 92], [51, 78], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
+var xYCord = [[80, 190], [50, 75], [125, 130], [354, 22], [354, 89], [80, 233], [90, 80], [234, 344], [81, 92], [51, 78], [125, 130], [354, 22], [354, 89], [644, 233], [444, 858], [234, 344]]
+
 var index = 0;
 function drawBall() {
   if (ballStatus == 1) {
   ctx.beginPath();
-  ctx.arc(xYCord[index][0], xYCord[index][1], ballRadius, 0, Math.PI*2);
-  // console.log('INDEX COUNTER : ' + index);
+  ctx.arc(coordX, coordY, ballRadius, 0, Math.PI*2);
   ctx.fillStyle = "#666";
   ctx.fill();
   ctx.closePath();
   }
 }
 
-function drawPaddle() {
-    // ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.beginPath();
-    ctx.rect(paddleX, paddleY-paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
-    // ctx.fillStyle = "img/myMonster.png";
+// function drawBall() {
+//   if (ballStatus == 1) {
+//   ctx.beginPath();
+//   ctx.arc(xYCord[index][0], xYCord[index][1], ballRadius, 0, Math.PI*2);
+//   ctx.fillStyle = "#666";
+//   ctx.fill();
+//   ctx.closePath();
+//   }
+// }
 
+function drawPaddle() {
+    ctx.beginPath();
+    ctx.rect(paddleX, paddleY-sizeGains[sizeGainsIndexOne], sizeGains[sizeGainsIndexOne], sizeGains[sizeGainsIndexOne]);
+    ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
 }
@@ -130,7 +134,7 @@ function drawPaddle() {
 function drawPaddleTwo() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.beginPath();
-    ctx.rect(paddleX2, paddleY2-paddleHeight2, paddleWidth2, paddleHeight2);
+    ctx.rect(paddleX2, paddleY2-sizeGains[sizeGainsIndexTwo], sizeGains[sizeGainsIndexTwo], sizeGains[sizeGainsIndexTwo]);
     // ctx.fillStyle = "#0095DD";
     ctx.fillStyle = "img/myMonster.png";
 
@@ -138,73 +142,92 @@ function drawPaddleTwo() {
     ctx.closePath();
 }
 
+var powerSpeeds = [2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9]
+var powerIndexOne = 0;
+var powerIndexTwo = 0;
+
+var sizeGains = [30, 30, 30, 40, 40, 40, 50, 50, 50, 60, 60, 60, 70, 70, 70]
+var sizeGainsIndexOne = 0;
+var sizeGainsIndexTwo = 0;
+
+// PADDLE VARIABLES 1
+var paddleHeight = sizeGains[sizeGainsIndexOne];
+var paddleWidth = sizeGains[sizeGainsIndexOne];
+var paddleX = (canvas.width-paddleWidth)/2;
+var paddleY = (canvas.height-paddleHeight)/2;
+
+// PADDLE VARIABLES 2
+var paddleHeight2 = sizeGains[sizeGainsIndexTwo];
+var paddleWidth2 = sizeGains[sizeGainsIndexTwo];
+var paddleX2 = (canvas.width-paddleWidth2)/1.5;
+var paddleY2 = (canvas.height-paddleHeight2)/1.5;
+
 
 function bb() {
   // BALL STATUS AND DISSIPEARING
-  var dist = ((paddleX - xYCord[index][0]) * (paddleX - xYCord[index][0]) + (paddleY - xYCord[index][1]) * (paddleY - xYCord[index][1]))
-  var dist2 = ((paddleX2 - xYCord[index][0]) * (paddleX2 - xYCord[index][0]) + (paddleY2 - xYCord[index][1]) * (paddleY2 - xYCord[index][1]))
+  var dist = ((paddleX - coordX) * (paddleX - coordX) + (paddleY - coordY) * (paddleY - coordY))
+  var dist2 = ((paddleX2 - coordX) * (paddleX2 - coordX) + (paddleY2 - coordY) * (paddleY2 - coordY))
 
-// console.log(dist);
+// PLAYER ONE
 if (dist < 100) {
   playerOneBallCount ++
-  // console.log('Player One Ball Count : ' + playerOneBallCount);
+  sizeGainsIndexOne ++
   ballStatus = 0;
-  index ++
+  // index ++
+  randomCoordX(0, 479)
+  randomCoordY(0, 319)
   ballStatus = 1;
-  powerIndex ++
-  sizeGainsIndex ++
+  powerIndexOne ++
 }
 
-
+// PLAYER TWO
 if (dist2 < 100) {
   playerTwoBallCount ++
-  console.log('Player Two Ball Count : ' + playerTwoBallCount);
   ballStatus = 0;
-  index ++
+  // index ++
   ballStatus = 1;
-  powerIndex ++
+  powerIndexTwo ++
+  sizeGainsIndexTwo ++
 
   }
 }
-
-var powerSpeeds = [2, 3, 4, 5, 6, 7, 8, 9]
-var powerIndex = 0;
 
 function draw() {
   drawPaddleTwo();
   drawPaddle();
   drawBall();
   bb();
+  console.log('SIZE ONE INDEX VALUE : ' + sizeGainsIndexOne);
 
   if(rightPressed && paddleX < canvas.width-paddleWidth) {
-    paddleX += powerSpeeds[powerIndex];
+    paddleX += powerSpeeds[powerIndexOne];
   }
   if(leftPressed && paddleX > 0) {
-    paddleX -= powerSpeeds[powerIndex];
+    paddleX -= powerSpeeds[powerIndexOne];
   }
   if(upPressed && paddleY > 0) {
-    paddleY -= powerSpeeds[powerIndex];
+    paddleY -= powerSpeeds[powerIndexOne];
   }
   else if(upPressed && paddleY < canvas.height-paddleHeight)
     paddleY = 25;
   if(downPressed && paddleY < canvas.height-paddleHeight+25 ) {
-    paddleY += powerSpeeds[powerIndex];
+    paddleY += powerSpeeds[powerIndexOne];
   }
 
 
   if(dPressed && paddleX2 < canvas.width-paddleWidth2) {
-    paddleX2 += powerSpeeds[powerIndex];
+    paddleX2 += powerSpeeds[powerIndexTwo];
   }
   if(aPressed && paddleX2 > 0) {
-    paddleX2 -= powerSpeeds[powerIndex];
+    paddleX2 -= powerSpeeds[powerIndexTwo];
   }
   if(wPressed && paddleY2 > 0) {
-    paddleY2 -= powerSpeeds[powerIndex];
+    paddleY2 -= powerSpeeds[powerIndexTwo];
   }
   else if(wPressed && paddleY2 < canvas.height-paddleHeight2)
     paddleY2 = 25;
   if(sPressed && paddleY2 < canvas.height-paddleHeight2+25 ) {
-    paddleY2 += powerSpeeds[powerIndex];
+    paddleY2 += powerSpeeds[powerIndexTwo];
   }
 
   x += dx;
@@ -212,5 +235,6 @@ function draw() {
   requestAnimationFrame(draw);
 
 }
-
+randomCoordX(0, 479)
+randomCoordY(0, 319)
 draw()
